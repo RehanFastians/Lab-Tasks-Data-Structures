@@ -25,7 +25,7 @@ int main(){
     account3.showBalance();
     cout<<"Deducting 200$ from Account 3";
     account3.deductBalance(200);
-    cout<<"Account 2 (after copying into Account 3 showing no change)"<<endl;
+    cout<<"\nAccount 2 (after copying into Account 3 showing no change)"<<endl;
     account2.showBalance();
     int* ptr = new int(5);
     cout<<*ptr<<endl;

@@ -7,7 +7,7 @@ class Exam{
     int* score=nullptr;
     public:
 /*
-    Since custom copy constructor is not built so the default one which performs shallow copy rather 
+    Since custom  copy constructor is not built so the default one which performs shallow copy rather 
     than deep one because it will just copy the pointers of one object to another i.e pointing
     to the same memory location instead of creating a new memory location for the second object
 */
@@ -33,11 +33,6 @@ class Exam{
         cout<<"\nStudent Name : "<<*student_name;
         cout<<"\nExam Date : "<<*exam_date;
         cout<<"\nScore : "<<*score;
-    }
-    ~Exam(){
-        delete student_name;
-        delete exam_date;
-        delete score;
     }
 };
 int main(){
