@@ -4,18 +4,6 @@
 using namespace std;
 
 int main(){
-    // int *arr;
-    // int n;
-    // cout<<"Enter size of array: ";
-    // cin>>n;
-    // arr = new int[n];
-    // nl
-    // cout<<"Enter elements : ";
-    // f(i, 0, n)   cin>>arr[i];
-    // nl
-    // cout<<"Entered elements : ";
-    // f(i, 0, n)  cout<<arr[i]<<' ';
-    // delete[] arr;
     int **grid;
     int r, c;
     cout<<"Enter rows and columns of 2D array : ";
