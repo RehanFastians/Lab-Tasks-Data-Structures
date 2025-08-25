@@ -20,5 +20,7 @@ int main(){
         nl
         f(j, 0, c)  cout<<grid[i][j]<<' ';
     }
+    f(i, 0, r)  delete[] grid;
+    delete[] grid;
     return 0;
 }
