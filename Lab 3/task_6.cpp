@@ -43,7 +43,8 @@ class LinkedList{
     void printList(){
         Node *temp=head;
         f(i, 0, size){
-            cout<<temp->data<<" ";
+            cout<<temp->data;
+            if(i!=size-1)   cout<<" -> ";
             temp=temp->next;
         }
         nl
