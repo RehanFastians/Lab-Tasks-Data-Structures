@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
-#define f(i, s, e) for(int i=s;i<e;i++)
 #define nl cout<<endl;
+#define f(i, s, e) for(int i=s;i<e;i++)
 using namespace std;
 struct Node{
     int data;
@@ -53,7 +53,7 @@ class LinkedList{
         temp->next = node;
     }
     void deleteNode(int val){
-        if (size==0)    return;
+        if(size==0) return;
         Node *temp = head;
         Node *prev = nullptr;
         f(i, 0, size){
@@ -75,22 +75,23 @@ class LinkedList{
         cout<<"Value not found!!";
         nl
     }
+    void rotate(int x){
+        if(size==0) return;
+        x%=size;
+        Node *temp = head;
+        f(i, 0, x){
+            tail->next=temp;
+            tail = temp;
+            head = temp->next;
+            temp = temp->next;
+        }
+    }
 };
 int main(){
-    int arr[]={3, 1, 2, 5, 8};
-    LinkedList list(arr, 5);
+    int arr[]={5, 3, 1, 8, 6, 4, 2};
+    LinkedList list(arr, 7);
     list.printList();
-    list.addNode(5, 9);
-    list.printList();
-    list.addNode(1, 11);
-    list.printList();
-    list.addNode(0, 4);
-    list.printList();
-    list.deleteNode(1);
-    list.printList();
-    list.deleteNode(2);
-    list.printList();
-    list.deleteNode(5);
+    list.rotate(2);
     list.printList();
     return 0;
 }

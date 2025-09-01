@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
-#define f(i, s, e) for(int i=s;i<e;i++)
 #define nl cout<<endl;
+#define f(i, s, e) for(int i=s;i<e;i++)
 using namespace std;
 struct Node{
     int data;
@@ -14,6 +14,10 @@ class LinkedList{
     Node *head=nullptr;
     Node *tail= nullptr;
     int size=0;
+
+    void check(int i, int size, Node *ptr1, Node *ptr2, bool &ans){
+        if()
+    }
     public:
     LinkedList(int arr[], int n){
         size=n;
@@ -53,7 +57,7 @@ class LinkedList{
         temp->next = node;
     }
     void deleteNode(int val){
-        if (size==0)    return;
+        if(size==0) return;
         Node *temp = head;
         Node *prev = nullptr;
         f(i, 0, size){
@@ -75,22 +79,61 @@ class LinkedList{
         cout<<"Value not found!!";
         nl
     }
+    void rotate(int x){
+        if(size==0) return;
+        x%=size;
+        Node *temp = head;
+        f(i, 0, x){
+            tail->next=temp;
+            tail = temp;
+            head = temp->next;
+            temp = temp->next;
+        }
+    }
+    void sortByParity(){
+        Node *oddHead =nullptr;
+        Node *oddTail =nullptr;
+        Node *evenHead =nullptr;
+        Node *evenTail =nullptr;
+        Node *temp = head;
+        f(i, 0, size){
+            if((temp->data&1)){
+                if(oddHead){
+                    oddTail->next = temp;
+                    oddTail=oddTail->next;
+                }else{
+                    oddHead=temp;
+                    oddTail=temp;
+                }
+            }else{
+                if(evenHead){
+                    evenTail->next = temp;
+                    evenTail=evenTail->next;
+                }else{
+                    evenHead=temp;
+                    evenTail=temp;
+                }
+            }
+            temp=temp->next;
+        }
+        if(evenHead){
+            head = evenHead;
+            tail = evenTail;
+        }
+        if(oddHead){
+            tail->next=oddHead;
+            tail = oddTail;
+        }
+    }
+    void checkPalindrome(){
+
+    }
 };
 int main(){
-    int arr[]={3, 1, 2, 5, 8};
-    LinkedList list(arr, 5);
+    int arr[]={17, 15, 8, 12, 10, 5, 4, 1, 7, 6};
+    LinkedList list(arr, 10);
     list.printList();
-    list.addNode(5, 9);
-    list.printList();
-    list.addNode(1, 11);
-    list.printList();
-    list.addNode(0, 4);
-    list.printList();
-    list.deleteNode(1);
-    list.printList();
-    list.deleteNode(2);
-    list.printList();
-    list.deleteNode(5);
+    list.sortByParity();
     list.printList();
     return 0;
 }
