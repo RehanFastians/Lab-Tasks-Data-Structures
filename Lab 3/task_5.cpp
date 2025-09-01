@@ -16,8 +16,17 @@ class LinkedList{
     Node *tail= nullptr;
     int size=0;
 
-    void check(int i, int size, Node *ptr1, Node *ptr2, bool &ans){
-        if()
+    void check(int i, int size, Node* &ptr, bool &ans){
+        if(i>size/2){
+            if(size&1)
+            ptr = ptr->next;
+            return;
+        }
+        Node *temp = ptr;
+        ptr =ptr->next;
+        check(i+1, size, ptr, ans);
+        if(temp->data != ptr->data)   ans = false;
+        ptr=ptr->next;
     }
     public:
     LinkedList(int arr[], int n){
@@ -127,14 +136,26 @@ class LinkedList{
         }
     }
     void checkPalindrome(){
-
+        bool isPal = true;
+        Node *ptr = head;
+        check(1,size, ptr, isPal);
+        if(isPal)   cout<<"Linked List is Palindrome";
+        else cout<<"Linked List is not Palindrome";
+        nl
     }
 };
 int main(){
-    int arr[]={17, 15, 8, 12, 10, 5, 4, 1, 7, 6};
-    LinkedList list(arr, 10);
-    list.printList();
-    list.sortByParity();
-    list.printList();
+    int arr1[]={17, 15, 8, 12, 10, 5, 4, 1, 7, 6};
+    LinkedList list1(arr1, 10);
+    list1.printList();
+    list1.checkPalindrome();
+    int arr2[]={1, 0, 2, 0, 1};
+    LinkedList list2(arr2, 5);
+    list2.printList();
+    list2.checkPalindrome();
+    int arr3[]={1, 0, 0, 1};
+    LinkedList list3(arr3, 4);
+    list3.printList();
+    list3.checkPalindrome();
     return 0;
 }
