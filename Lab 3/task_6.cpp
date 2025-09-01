@@ -53,7 +53,7 @@ class LinkedList{
         if(pos>size || pos<0){
             cout<<"Not possible";
             nl
-            return;
+            return; 
         }
         size++;
         if(pos==0){
