@@ -1,133 +1,59 @@
 #include <bits/stdc++.h>
+#define f(i, s, e) for (int i = s; i < e; i++)
+#define fn(i, s, e) for (int i = s; i >= e; i--)
 #define nl cout << endl;
-#define f(i, s, e) for(int i=s;i<e;i++)
 using namespace std;
-// 24K-0707
-class Node
+template <typename T>
+class MyStack
 {
-public:
-    int val;
-    Node *next;
-    Node *prev;
-    Node(int val) : val(val), next(nullptr), prev(nullptr) {}
-};
-
-class LinkedList
-{
-
-private:
-    Node *reverseRecursive(Node *node)
-    {
-        if (!node)
-            return nullptr;
-        swap(node->prev, node->next);
-        if (node->prev == nullptr) // Base case 
-        {
-            return node; // yeh reversed list ka naya head jo key obv tail hoga woh return krega
-        }
-        return reverseRecursive(node->prev);
-    }
+    T *arr = nullptr;
+    int size = 0;
+    int used = 0;
 
 public:
-    Node *head;
-    Node *tail;
-    int size;
-    LinkedList(Node *head) : head(head), size(1)
+    MyStack(int size) : size(size)
     {
-        tail = head;
-        while (tail->next)
-        {
-            size++;
-            tail = tail->next;
-        }
+        arr = new T[size];
     }
-    LinkedList(int arr[], int n) : size(n)
+    void push(T x)
     {
-        head = new Node(arr[0]);
-        tail = head;
-        f(i, 1, n)
-        {
-            Node *newNode = new Node(arr[i]);
-            tail->next = newNode;
-            newNode->prev = tail;
-            tail = tail->next;
-        }
-    }
-    ~LinkedList()
-    {
-        Node *cur = head;
-        while (cur)
-        {
-            Node *temp = cur->next;
-            delete cur;
-            cur = temp;
-        }
-        head = tail = nullptr;
-    }
-    void print()
-    {
-        Node *cur = head;
-        while (cur)
-        {
-            cout << cur->val << (cur->next ? " " : "\n");
-            cur = cur->next;
-        }
-    }
-    void deleteAtPosition(int k)
-    {
-        if (!head || k >= size || k<0)
+        if (used == size)
             return;
-
-        if (k == 0)
-        {
-            Node *temp = head;
-            head = head->next;
-            if (head)
-                head->prev = nullptr;
-            else
-                tail = nullptr;
-            delete temp;
-            size--;
-            return;
-        }
-
-        Node *cur = head;
-        f(i, 0, k)
-            cur = cur->next;
-
-        if (cur->next)
-            cur->next->prev = cur->prev;
+        arr[used++] = x;
+    }
+    void pop()
+    {
+        if (used != 0)
+            used--;
+    }
+    int top()
+    {
+        if (used != 0)
+            return arr[used - 1];
         else
-            tail = cur->prev;
-
-        cur->prev->next = cur->next;
-        delete cur;
-        size--;
+            return -1;
     }
-    void reverse()
-    {
-        head = reverseRecursive(head);
-        tail = head;
-        while (tail && tail->next)
-        {
-            tail = tail->next;
-        }
-    }
+    bool isEmpty() const { return used == 0; }
 };
 
 int main()
 {
-    int arr[] = {1, 2, 3, 4, 5};
-    LinkedList list(arr, 5);
-    nl
-    list.print();
-    int idx;
-    cout << "\nEnter position of element to delete: ";
-    cin >> idx;
-    list.deleteAtPosition(idx);
-    list.print();
-    list.reverse();
-    list.print();
-    nl
-    return 0;
+    // string word = "BOROOROB";   //A valid palindorome for checking
+    string word = "BORROWROB";
+    MyStack<char> left(9), right(9);
+    f(i, 0, word.length()) left.push(word[i]);
+    fn(i, word.length() - 1, 0) right.push(word[i]);
+    bool check = true;
+    while (!left.isEmpty())
+    {
+        if (left.top() != right.top())
+            check = false;
+        left.pop();
+        right.pop();
+    }
+    if (check)
+        cout << "Yes it is a palindrome!!";
+    else
+        cout << "Unfortunately it is not a palindrome!!!!";
+    nl return 0;
 }
