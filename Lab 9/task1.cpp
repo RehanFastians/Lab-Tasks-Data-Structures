@@ -1,26 +1,31 @@
 #include <bits/stdc++.h>
-#define nl cout << endl;
 #define f(i, s, e) for (int i = s; i < e; i++)
 #define fn(i, s, e) for (int i = s; i >= e; i--)
+#define nl cout << endl;
 using namespace std;
 
 struct Node
 {
-    int value, height;
-    Node *left, *right;
-    Node(int val)
+    int value;
+    Node *left;
+    Node *right;
+    int height;
+    Node(int v)
     {
-        value = val;
-        left = right = NULL;
+        value = v;
+        left = right = nullptr;
         height = 1;
     }
 };
 
-class AVLConverter
+class AVLTree
 {
     Node *root;
 
-    int getHeight(Node *node) { return node ? node->height : 0; }
+    int getHeight(Node *node)
+    {
+        return node ? node->height : 0;
+    }
 
     int getBalance(Node *node)
     {
@@ -29,16 +34,17 @@ class AVLConverter
 
     void updateHeight(Node *node)
     {
-        if (node)
-            node->height = 1 + max(getHeight(node->left), getHeight(node->right));
+        if (!node)
+            return;
+        node->height = 1 + max(getHeight(node->left), getHeight(node->right));
     }
 
     Node *rotateRight(Node *y)
     {
         Node *x = y->left;
-        Node *temp = x->right;
+        Node *T2 = x->right;
         x->right = y;
-        y->left = temp;
+        y->left = T2;
         updateHeight(y);
         updateHeight(x);
         return x;
@@ -47,27 +53,27 @@ class AVLConverter
     Node *rotateLeft(Node *x)
     {
         Node *y = x->right;
-        Node *temp = y->left;
+        Node *T2 = y->left;
         y->left = x;
-        x->right = temp;
+        x->right = T2;
         updateHeight(x);
         updateHeight(y);
         return y;
     }
 
-    Node *balance(Node *node)
+    Node *balanceNode(Node *node)
     {
-        int balanceFactor = getBalance(node);
-        if (balanceFactor > 1 && getBalance(node->left) >= 0)
+        int bal = getBalance(node);
+        if (bal > 1 && getBalance(node->left) >= 0)
             return rotateRight(node);
-        if (balanceFactor > 1 && getBalance(node->left) < 0)
+        if (bal > 1 && getBalance(node->left) < 0)
         {
             node->left = rotateLeft(node->left);
             return rotateRight(node);
         }
-        if (balanceFactor < -1 && getBalance(node->right) <= 0)
+        if (bal < -1 && getBalance(node->right) <= 0)
             return rotateLeft(node);
-        if (balanceFactor < -1 && getBalance(node->right) > 0)
+        if (bal < -1 && getBalance(node->right) > 0)
         {
             node->right = rotateRight(node->right);
             return rotateLeft(node);
@@ -75,74 +81,64 @@ class AVLConverter
         return node;
     }
 
-    Node *insertBST(Node *node, int val)
+    Node *insertNode(Node *node, int val)
     {
         if (!node)
             return new Node(val);
+
         if (val < node->value)
-            node->left = insertBST(node->left, val);
+            node->left = insertNode(node->left, val);
         else if (val > node->value)
-            node->right = insertBST(node->right, val);
+            node->right = insertNode(node->right, val);
+        else
+            return node; // duplicate, ignore
+
         updateHeight(node);
-        return node;
+        return balanceNode(node);
     }
 
-    Node *convertToAVL(Node *node)
-    {
-        if (!node)
-            return NULL;
-        node->left = convertToAVL(node->left);
-        node->right = convertToAVL(node->right);
-        updateHeight(node);
-        return balance(node);
-    }
-
-    void preorder(Node *node)
+    void inorderPrint(Node *node)
     {
         if (!node)
             return;
-        int leftH = getHeight(node->left);
-        int rightH = getHeight(node->right);
-        cout << setw(2) << node->value << "   "
-             << setw(2) << leftH << "   "
-             << setw(2) << rightH << "   "
-             << setw(2) << getBalance(node) << endl;
-        preorder(node->left);
-        preorder(node->right);
+        inorderPrint(node->left);
+        cout << node->value << " ";
+        inorderPrint(node->right);
     }
 
 public:
-    AVLConverter() { root = NULL; }
+    AVLTree() { root = nullptr; }
 
-    void insert(int val) { root = insertBST(root, val); }
+    void insert(int val) { root = insertNode(root, val); }
 
-    void convert() { root = convertToAVL(root); }
-
-    void display()
+    void displayInorder()
     {
-        cout << "ND   LH   RH   BF" << endl;
-        preorder(root);
-        nl
+        inorderPrint(root);
+        cout << endl;
     }
+
+    int height() { return getHeight(root); }
 };
 
 int main()
 {
-    AVLConverter tree;
+    AVLTree tree;
     tree.insert(10);
-    tree.insert(16);
-    tree.insert(12);
-    tree.insert(18);
+    tree.insert(20);
+    tree.insert(30);
+    tree.insert(40);
+    tree.insert(50);
 
     nl
             cout
-        << "Preorder of BST (Before Conversion): " << endl;
-    tree.display();
+        << "Inorder before inserting 15: ";
+    tree.displayInorder();
 
-    tree.convert();
+    tree.insert(15);
 
-    cout << "Preorder of AVL (After Conversion): " << endl;
-    tree.display();
+    cout << "Inorder after inserting 15: ";
+    tree.displayInorder();
 
-    return 0;
+    cout << "Height of AVL tree: " << tree.height() << endl;
+    nl return 0;
 }
