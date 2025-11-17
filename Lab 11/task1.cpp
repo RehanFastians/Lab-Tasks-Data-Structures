@@ -2,28 +2,60 @@
 #define f(i, s, e) for (int i = s; i < e; i++)
 #define fn(i, s, e) for (int i = s; i >= e; i--)
 #define nl cout << endl;
+#define all(arr) arr.begin(), arr.end()
 
 using namespace std;
+class HashMap;
+class Node
+{
+    string key;
+    char value;
+    Node *next;
 
-class Node{
-    int key;
-    string value;
-    public:
-    Node(int key, string value) : key(key), value(value){}
+public:
+    Node(string key, char value, Node *next = nullptr) : key(key), value(value), next(next) {}
+    friend class HashMap;
 };
 
-void insert(int key, string value) {
-    int index = hashFunction(key);
-    Node* newNode = new Node(key, value);
+class HashMap
+{
+    Node **hashTable = nullptr;
+    int hashSize = 0;
 
-    if (table[index] == nullptr) {
+public:
+    HashMap(int size = 0) : hashSize(size)
+    {
+        hashTable = new Node *[hashSize];
+    }
+    int hashFunction(string key);
+    void insert(char value, string key);
+    void remove(string key);
+    char search(string key);
+};
+
+int HashMap ::hashFunction(string key)
+{
+    return accumulate(all(key), 0) % hashSize;
+}
+
+void HashMap ::insert(char value, string key)
+{
+    int index = hashFunction(key);
+    Node *newNode = new Node(key, value);
+
+    if (hashTable[index] == nullptr)
+    {
         // No collision
-        table[index] = newNode;
-    } else {
+        hashTable[index] = newNode;
+    }
+    else
+    {
         // Collision occurred -> add to the end of linked list
-        Node* temp = table[index];
-        while (temp->next != nullptr) {
-            if (temp->key == key) {
+        Node *temp = hashTable[index];
+        while (temp->next != nullptr)
+        {
+            if (temp->key == key)
+            {
                 // Update existing key
                 temp->value = value;
                 delete newNode;
@@ -32,7 +64,8 @@ void insert(int key, string value) {
             temp = temp->next;
         }
         // Check Last node
-        if (temp->key == key) {
+        if (temp->key == key)
+        {
             temp->value = value;
             delete newNode;
             return;
@@ -42,46 +75,58 @@ void insert(int key, string value) {
 }
 
 // Delete a key
-void remove(int key) {
+void HashMap ::remove(string key)
+{
     int index = hashFunction(key);
-    Node* temp = table[index];
-    Node* prev = nullptr;
+    Node *temp = hashTable[index];
+    Node *prev = nullptr;
 
-    while (temp != nullptr && temp->key != key) {
+    while (temp != nullptr && temp->key != key)
+    {
         prev = temp;
         temp = temp->next;
     }
 
-    if (temp == nullptr) {
+    if (temp == nullptr)
+    {
         cout << "Key " << key << " not found!\n";
         return;
     }
 
     if (prev == nullptr)
-        table[index] = temp->next; // Remove head node
+        hashTable[index] = temp->next; // Remove head node
     else
-        prev->next = temp->next;   // Remove middle or Last node
+        prev->next = temp->next; // Remove middle or Last node
 
     delete temp;
     cout << "Key " << key << " deleted successfully.\n";
 }
 
-string search(int key) {
+char HashMap ::search(string key)
+{
     int index = hashFunction(key);
-    Node* temp = table[index];
+    Node *temp = hashTable[index];
 
-    while (temp != nullptr) {
+    while (temp != nullptr)
+    {
         if (temp->key == key)
             return temp->value;
         temp = temp->next;
     }
-    return "Key not found";
+    return '-';
 }
-
-
 
 int main()
 {
+    HashMap myHash(100);
+    myHash.insert('A', "aaaaa");
+    myHash.insert('B', "bbbbb");
+    myHash.insert('C', "ccccc");
+    myHash.insert('A', "zzzzz");
+    cout << myHash.search("ccccc");
+    nl
 
-    return 0;
+            cout
+        << myHash.search("zzzzz");
+    nl return 0;
 }
