@@ -47,11 +47,13 @@ public:
             if (it->first == key)
             {
                 lst.erase(it);
-                cout << "key " << key << " deleted successfully !" << endl;
+                cout << "key " << key << " deleted successfully !";
+                nl
                 return;
             }
         }
-        cout << "Key " << key << " not found!" << endl;
+        cout << "Key " << key << " not found!";
+        nl
     }
 
     void search(string key)
@@ -61,11 +63,13 @@ public:
         {
             if (p.first == key)
             {
-                cout << "search key " << key << ": " << p.second << endl;
+                cout << "search key " << key << ": " << p.second;
+                nl
                 return;
             }
         }
-        cout << "Error: " << key << " not found!" << endl;
+        cout << "Error: " << key << " not found!";
+        nl
     }
 
     void display()
@@ -80,7 +84,7 @@ public:
                     cout << "(" << it.first << ", " << it.second << ")";
                     cout << " -> ";
                 }
-                nl;
+                nl
             }
         }
     }
@@ -100,6 +104,6 @@ int main()
     dict.display();
     dict.search("ZZ");
 
-    nl;
+    nl
     return 0;
 }
